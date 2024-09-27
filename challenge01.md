@@ -16,13 +16,13 @@ To run some workload in AKS cluster in a robust and secure way we need to rely n
 
 
 * Shared Resource Group `rg-hackathon-shared`
-  * Azure Container Registry (ACR) - `hackathon`
+  * Azure Container Registry (ACR) - `hackathonlingea`
   * Public DNS zone - `teamX.<hackathondomain>.noibithackathon.cloud`
 
 
 * Team's Resource Groups - `rg-hackathon-teamX`
-  * Azure Virtual Network - `vnet-hackathon-plc-teamX`
-  * Azure Key Vault - `kv-hackathon-plc-teamX`
+  * Azure Virtual Network - `vnet-hackathon-gwc-teamX`
+  * Azure Key Vault - `kv-hackathon-gwc-teamX`
 
 
 * Naming convention
