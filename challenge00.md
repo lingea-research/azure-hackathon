@@ -10,8 +10,8 @@ Before you can start, you will need to check and to set up some prerequisites.
 
 * Azure account (`<first_name>.<last_name>@<domain>.onmicrosoft.com`)
 * Access to [Azure portal](https://portal.azure.com)
-* Access to Project/Repository in Azure DevOps
-  * Ability to write to the repository ([using SSH key](https://learn.microsoft.com/en-us/azure/devops/repos/git/use-ssh-keys-to-authenticate?view=azure-devops))
+* Access to Project/Repository in [Azure DevOps](https://learn.microsoft.com/en-us/azure/devops/repos/git/use-ssh-keys-to-authenticate?view=azure-devops) / [GitHub](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+  * Ability to write to the repository (using SSH key)
 
 ### Install locally
 
