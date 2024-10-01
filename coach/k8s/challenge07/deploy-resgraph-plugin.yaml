@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openai-plugin
+  namespace: openai
+  labels:
+    app: openai-plugin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openai-plugin
+  template:
+    metadata:
+      labels:
+        app: openai-plugin
+        azure.workload.identity/use: "true"
+    spec:
+      serviceAccountName: openai-plugin
+      containers:
+        - name: openai-plugin
+          image: hackathonppf.azurecr.io/resgraph-plugin:0.2
+          env:
+            - name: SUBSCRIPTION_ID
+              value: !CHANGEME!
+          ports:
+            - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openai-plugin
+  namespace: openai
+spec:
+  selector:
+    app: openai-plugin
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000

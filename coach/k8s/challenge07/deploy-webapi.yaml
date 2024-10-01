@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openai-webapi
+  namespace: openai
+  labels:
+    app: openai-webapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openai-webapi
+  template:
+    metadata:
+      labels:
+        app: openai-webapi
+    spec:
+      containers:
+        - name: openai-webapi
+          image: hackathonppf.azurecr.io/chatbot-webapi:0.3
+          ports:
+            - containerPort: 40443
+          env:
+            # - name: Authentication__Type
+            #   value: "AzureAD"
+            # - name: Authentication__AzureAd__Instance
+            #   value: https://login.microsoftonline.com
+            # - name: Authentication__AzureAd__TenantId
+            #   value: 123
+            # - name: Authentication__AzureAd__ClientId
+            #   value: 123
+            # - name: Authentication__AzureAd__Scopes
+            #   value: access_as_user
+            - name: KernelMemory__TextGeneratorType
+              value: AzureOpenAI
+            - name: KernelMemory__DataIngestion__EmbeddingGeneratorTypes__0
+              value: AzureOpenAI
+            - name: KernelMemory__Retrieval__EmbeddingGeneratorType
+              value: AzureOpenAI
+            - name: KernelMemory__Services__AzureOpenAIText__Endpoint
+              value: https://bluelocal-swe.openai.azure.com/
+            - name: KernelMemory__Services__AzureOpenAIText__Deployment
+              value: gpt4-32k
+            - name: KernelMemory__Services__AzureOpenAIText__APIKey
+              value: !CHANGEME! 
+            - name: KernelMemory__Services__AzureOpenAIEmbedding__Endpoint
+              value: https://bluelocal-swe.openai.azure.com/
+            - name: KernelMemory__Services__AzureOpenAIEmbedding__Deployment
+              value: text-embedding-ada-002
+            - name: KernelMemory__Services__AzureOpenAIEmbedding__APIKey
+              value: !CHANGEME!
+            - name: Frontend__AadClientId
+              value: 123
+            - name: AllowedHosts
+              value: "*"
+            - name: Kestrel__Endpoints__Https__Url
+              value: https://0.0.0.0:40443
+            - name: Kestrel__Endpoints__Https__Certificate_Path
+              value: /tls/tls.crt
+            - name: Kestrel__Endpoints__Https__Certificate_KeyPath
+              value: /tls/tls.key
+            # - name: AllowedOrigins__0
+            #   value: "*"
+            - name: AllowedOrigins__0
+              value: http://!CHANGEME!:3000
+          volumeMounts:
+            - name: tls
+              mountPath: "/tls"
+              readOnly: true
+      volumes:
+        - name: tls
+          secret:
+            secretName: openai-backend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openai-webapi
+  namespace: openai
+  annotations:
+    service.beta.kubernetes.io/azure-deny-all-except-load-balancer-source-ranges: "true"
+spec:
+  loadBalancerSourceRanges:
+    - 185.160.21.74/32
+  selector:
+    app: openai-webapi
+  ports:
+    - name: https
+      protocol: TCP
+      port: 40443
+      targetPort: 40443
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer

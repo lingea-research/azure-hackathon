@@ -1,0 +1,7 @@
+namespace: openai
+resources:
+  - ns.yaml
+  - sa.yaml
+  - deploy-resgraph-plugin.yaml
+  - deploy-webapi.yaml
+  - deploy-webapp.yaml
