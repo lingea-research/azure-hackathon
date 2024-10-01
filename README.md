@@ -25,6 +25,20 @@ If not specified otherwise, create all Azure resources in **Poland Central** reg
 ### Challenge 02: [Ingress Controller and DNS for Public IPs](challenge02.md)
 * Explore integrating DNS with Kubernetes services and configuring an Ingress Controller
 
+```
+# before applying
+cat <<-EOF > azure.json
+{
+  "tenantId": "$(az account show --query tenantId -o tsv)",
+  "subscriptionId": "$(az account show --query id -o tsv)",
+  "resourceGroup": "$AZURE_DNS_ZONE_RESOURCE_GROUP",
+  "useManagedIdentityExtension": true,
+  "userAssignedIdentityID": "$IDENTITY_CLIENT_ID"
+}
+EOF
+kubectl create secret generic azure-config-file --namespace "default" --from-file ./azure.json
+```
+
 ### Challenge 03: [AKS Security (Azure Policies)](challenge03.md)
 * Easy way how to detect and control some of Kubernetes security aspects
 
