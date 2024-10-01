@@ -54,6 +54,7 @@ spec:
             - --provider=azure
             - --azure-resource-group=rg-hackathon-shared
             - --txt-prefix=externaldns-
+            - --annotation-filter=kubernetes.io/ingress.class=nginx
           volumeMounts:
             - name: azure-config-file
               mountPath: /etc/kubernetes
